@@ -1,16 +1,14 @@
-(ns mapper
+(ns nl.zeekat.java.fields.test
   (:use clojure.test
-        nl.zeekat.reflect-map)
+        nl.zeekat.java.fields)
   (:require [clojure.contrib.logging :as log]))
-
-(set! *warn-on-reflection* true)
-
-(deftest dynamic-fields
-  (is (= {:field1 1 :field2 2}
-         (rec-map (TestType. 1 2)))))
 
 (deftype TestType
     [field1 field2])
+
+(deftest dynamic-fields
+  (is (= {:field1 1 :field2 2}
+         (fields (TestType. 1 2)))))
 
 (deftype OtherType
     [a b])

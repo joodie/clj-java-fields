@@ -1,0 +1,32 @@
+# nl.zeekat.java.fields
+
+Convert public fields to clojure maps
+
+## Usage
+
+(ns your.namespace
+ (:use nl.zeekat.java.fields))
+
+(deftype TestType
+    [field1 field2])
+
+; fully dynamic:
+
+(fields (TestType. 1 2)) 
+=> {:field1 1 :field2 2}
+  
+; optimized for specific class:
+(def-fields rec-map TestType)
+
+(rec-map (TestType. 1 2)) 
+=> {:field1 1 :field2 2}
+
+Field names are translated to lisp-style
+
+## License
+
+Copyright (C) 2011 Joost Diepenmaat, Zeekat Softwareontwikkeling
+
+joost@zeekat.nl
+
+Distributed under the Eclipse Public License, the same as Clojure.
