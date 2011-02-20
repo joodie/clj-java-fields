@@ -39,18 +39,19 @@
   [^Field f]
   (symbol (str "." (.getName f))))
 
-(defn map-fields
-  "Dynamically convert the public fields of an object to a map"
+(defn fields
+  "Dynamically convert the public, non-static fields of an object to a map. Uses reflection at run time."
   [object]
   (let [fields (public-fields (class object))]
     (zipmap (map field-to-keyword fields)
             (map #(.get % object) fields))))
 
-(defmacro def-field-mapper
-  [name class]
-  "build a static mapper from class to hash-map."
-  (let [cls (eval class)]
-    `(defn ~name [~(with-meta 'object {:tag class})]
+(defmacro def-fields
+  [name klass]
+  "Build a function to convert an object of class klass to a map.
+Like `fields' but only uses reflection at compile time."
+  (let [cls (eval klass)]
+    `(defn ~name [~(with-meta 'object {:tag klass})]
        ~(apply hash-map
                (mapcat #(vector (field-to-keyword %)
                                 (list (field-to-access-symbol %) 'object))
